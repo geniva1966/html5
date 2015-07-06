@@ -1,8 +1,6 @@
-require.paths.push('lib');
-require.paths.push('deps/jsdom/lib');
-var HTML5 = require('html5'),
+#!/usr/bin/env node
+var HTML5 = require('../lib/html5'),
 	events = require('events'),
-	sys = require('sys'),
 	fs = require('fs'),
 	assert = require('assert')
 
@@ -16,8 +14,7 @@ if(process.argv[3]) {
 }
 
 p.on('end', function() {
-	console.log(HTML5.serialize(p.document, null, {lowercase: true,
-quote_attr_values: false}))
+	console.log(require('../test/lib/serializeTestOutput').serializeTestOutput(p.document))
 })
 
 p.parse(inp);

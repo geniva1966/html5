@@ -1,31 +1,28 @@
 HTML5 Parser for node.js
 ========================
 
+[![Build Status](https://travis-ci.org/aredridel/html5.svg?branch=master)](https://travis-ci.org/aredridel/html5)
 
-Example (With jQuery!) 
-----------------------
+Examples
+--------
 
-        /* Before you run this, run:
-              git submodule update --init
-              (cd deps/jquery; rake)
-        */
-        var  HTML5 = require('html5'),
-            Script = process.binding('evals').Script,
-               sys = require('sys'),
-                fs = require('fs'),
-             jsdom = require('jsdom'),
-            window = jsdom.jsdom(null, null, {parser: HTML5}).createWindow()
+A simple example:
 
-        var parser = new HTML5.Parser({document: window.document});
+```javascript
+var HTML5 = require('html5');
+var jsdom = require('jsdom');
+var core = jsdom.browserAugmentation(jsdom.level(3));
 
-        var inputfile = fs.readFileSync('doc/jquery-example.html');
-        parser.parse(inputfile);
+var impl = new core.DOMImplementation();
+var document = impl.createDocument();
+var parser = new HTML5.JSDOMParser(document, core);
 
-        jsdom.jQueryify(window, __dirname + '/deps/jquery/dist/jquery.js', function(window, jquery) {
-                Script.runInNewContext('jQuery("p").append("<b>Hi!</b>")', window);
-                sys.puts(window.document.innerHTML);
+parser.parse('<p>I am a very small HTML document</p>');
 
-        });
+console.log(document.getElementsByTagName("p")[0].innerHTML);
+```
+
+
 Interesting features
 --------------------
 
@@ -40,19 +37,13 @@ Installation
 
 Use `npm`, or to use the git checkout, read on.
 
-You'll need to initialize git submodules if you're pulling this from my git
-repository. 
+You'll need to fetch dependencies or initialize git submodules if you're
+pulling this from my git repository. 
 
-	git submodules init
-
-To give it a test, set up your environment, including the directory containing the built dom.js from jsdom:
-
-	export NODE_PATH=lib:deps/jsdom/lib
-
-Or copy the contents of the jsdom lib directory to ~/.node_libraries/
+	npm install
 
 and give it a run:
 
-	node test.js
+	npm test
 
-Git repository at http://theinternetco.net/~aredridel/projects/js/html5/.git/
+Git repository at http://dinhe.net/~aredridel/projects/js/html5.git/
